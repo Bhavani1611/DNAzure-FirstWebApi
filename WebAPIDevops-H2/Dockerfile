@@ -5,21 +5,21 @@
 #EXPOSE 80
 #EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
-WORKDIR /src
-COPY ["WebAPIDevops-H2/WebAPIDevops-H2.csproj", "WebAPIDevops-H2/"]
-RUN dotnet restore "WebAPIDevops-H2/WebAPIDevops-H2.csproj"
-COPY . .
-WORKDIR "/src/WebAPIDevops-H2"
-RUN dotnet build "WebAPIDevops-H2.csproj" -c Release -o /app/build
+#FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
+#WORKDIR /src
+#COPY ["WebAPIDevops-H2/WebAPIDevops-H2.csproj", "WebAPIDevops-H2/"]
+#RUN dotnet restore "WebAPIDevops-H2/WebAPIDevops-H2.csproj"
+#COPY . .
+#WORKDIR "/src/WebAPIDevops-H2"
+#RUN dotnet build "WebAPIDevops-H2.csproj" -c Release -o /app/build
 
-FROM build AS publish
-RUN dotnet publish "WebAPIDevops-H2.csproj" -c Release -o /app/publish
+#FROM build AS publish
+#RUN dotnet publish "WebAPIDevops-H2.csproj" -c Release -o /app/publish
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WebAPIDevops-H2.dll"]
+#FROM base AS final
+#WORKDIR /app
+#COPY --from=publish /app/publish .
+#ENTRYPOINT ["dotnet", "WebAPIDevops-H2.dll"]
 
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 
