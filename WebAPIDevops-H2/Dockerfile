@@ -21,28 +21,43 @@
 #COPY --from=publish /app/publish .
 #ENTRYPOINT ["dotnet", "WebAPIDevops-H2.dll"]
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
+#FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 
-WORKDIR /app
+#WORKDIR /app
 
 # Copy csproj and restore as distinct layers
 
-COPY *.csproj ./
+#COPY *.csproj ./
 
-RUN dotnet restore
+#RUN dotnet restore
 
 # Copy everything else and build
 
-COPY . ./
+#COPY . ./
 
-RUN dotnet publish -c Release -o out
+#RUN dotnet publish -c Release -o out
 
 # Build runtime image
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
+#FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
 
+#WORKDIR /app
+
+#COPY --from=build-env /app/out .
+
+#ENTRYPOINT ["dotnet", "WebAPIDevops-H2.dll"]
+
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /app
+# Copy csproj and restore as distinct layers
+COPY *.csproj ./
+RUN dotnet restore
+# Copy everything else and build
+COPY . ./
+RUN dotnet publish -c Release -o out
 
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+WORKDIR /app
 COPY --from=build-env /app/out .
-
 ENTRYPOINT ["dotnet", "WebAPIDevops-H2.dll"]
